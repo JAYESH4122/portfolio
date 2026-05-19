@@ -281,6 +281,7 @@ function CategoryCard({
 
   return (
     <motion.div
+      data-category
       initial={{ opacity: 0, y: 30 }}
       animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
       transition={{ duration: 0.6, delay: index * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
@@ -373,6 +374,7 @@ export default function TechStack() {
       <div className="relative z-10 w-full max-w-[1200px] mx-auto px-5 sm:px-6 md:px-12">
         {/* Section header */}
         <motion.div
+          data-tech-header
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
@@ -399,7 +401,7 @@ export default function TechStack() {
         </motion.div>
 
         {/* Bento grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 md:gap-5">
+        <div data-tech-grid className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 md:gap-5">
           {categories.map((category, i) => (
             <CategoryCard
               key={category.sysCode}

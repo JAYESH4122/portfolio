@@ -60,6 +60,7 @@ function ProjectCard({ project, index }: { project: ProjectItem; index: number }
 
   return (
     <div
+      data-project-card
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       className="project-card relative flex-shrink-0 w-full md:w-[50vw] lg:w-[40vw] md:h-[75vh] md:min-h-[480px] md:max-h-[620px] rounded-lg border border-white/[0.06] bg-white/[0.01] backdrop-blur-md overflow-hidden group cursor-crosshair"
@@ -113,7 +114,7 @@ function ProjectCard({ project, index }: { project: ProjectItem; index: number }
         </div>
 
         {/* Project image/mockup block */}
-        <div className="relative w-full h-[35%] min-h-[160px] rounded-md border border-white/[0.06] overflow-hidden mb-6 bg-black/30">
+        <div data-card-image className="relative w-full h-[35%] min-h-[160px] rounded-md border border-white/[0.06] overflow-hidden mb-6 bg-black/30">
           <div
             className="absolute inset-0 transition-all duration-700 ease-out"
             style={{
@@ -148,34 +149,36 @@ function ProjectCard({ project, index }: { project: ProjectItem; index: number }
         </div>
 
         {/* Title & role */}
-        <h3
-          style={{ fontFamily: "var(--font-passero), sans-serif" }}
-          className="text-xl sm:text-2xl md:text-3xl text-white/90 group-hover:text-white transition-colors duration-300 mb-1"
-        >
-          {project.title}
-        </h3>
-        <span
-          style={{ fontFamily: "var(--font-geo), sans-serif" }}
-          className="text-[11px] sm:text-xs text-violet-400/70 tracking-wide mb-4"
-        >
-          {project.role}
-        </span>
+        <div data-card-text>
+          <h3
+            style={{ fontFamily: "var(--font-passero), sans-serif" }}
+            className="text-xl sm:text-2xl md:text-3xl text-white/90 group-hover:text-white transition-colors duration-300 mb-1"
+          >
+            {project.title}
+          </h3>
+          <span
+            style={{ fontFamily: "var(--font-geo), sans-serif" }}
+            className="text-[11px] sm:text-xs text-violet-400/70 tracking-wide mb-4 block"
+          >
+            {project.role}
+          </span>
 
-        {/* Description */}
-        <p className="text-[11px] sm:text-xs text-white/40 leading-relaxed font-mono mb-auto max-w-md">
-          {project.description}
-        </p>
+          {/* Description */}
+          <p className="text-[11px] sm:text-xs text-white/40 leading-relaxed font-mono mb-auto max-w-md">
+            {project.description}
+          </p>
 
-        {/* Tech stack pills */}
-        <div className="flex flex-wrap gap-1.5 mb-6 mt-5">
-          {project.tech.map((t) => (
-            <span
-              key={t}
-              className="px-2 py-0.5 rounded border border-white/[0.06] bg-white/[0.02] text-[9px] font-mono uppercase tracking-wider text-white/35 group-hover:text-white/55 group-hover:border-white/10 transition-all duration-300"
-            >
-              {t}
-            </span>
-          ))}
+          {/* Tech stack pills */}
+          <div className="flex flex-wrap gap-1.5 mb-6 mt-5">
+            {project.tech.map((t) => (
+              <span
+                key={t}
+                className="px-2 py-0.5 rounded border border-white/[0.06] bg-white/[0.02] text-[9px] font-mono uppercase tracking-wider text-white/35 group-hover:text-white/55 group-hover:border-white/10 transition-all duration-300"
+              >
+                {t}
+              </span>
+            ))}
+          </div>
         </div>
 
         {/* Action buttons */}
@@ -216,7 +219,7 @@ export default function WorkPreview() {
 
         const totalScroll = track.scrollWidth - window.innerWidth;
 
-        gsap.to(track, {
+        const horizontalTween = gsap.to(track, {
           x: -totalScroll,
           ease: "none",
           scrollTrigger: {
@@ -227,15 +230,59 @@ export default function WorkPreview() {
             invalidateOnRefresh: true,
           },
         });
+
+        const cards = track.querySelectorAll("[data-project-card]");
+        cards.forEach((card) => {
+          const textBlock = card.querySelector("[data-card-text]");
+          const imageBlock = card.querySelector("[data-card-image]");
+
+          if (textBlock) {
+            gsap.fromTo(
+              textBlock,
+              { x: 40, opacity: 0.5 },
+              {
+                x: 0,
+                opacity: 1,
+                ease: "none",
+                scrollTrigger: {
+                  trigger: card,
+                  containerAnimation: horizontalTween,
+                  start: "left 85%",
+                  end: "left 35%",
+                  scrub: 1,
+                },
+              }
+            );
+          }
+
+          if (imageBlock) {
+            gsap.fromTo(
+              imageBlock,
+              { scale: 1.06, opacity: 0.7 },
+              {
+                scale: 1,
+                opacity: 1,
+                ease: "none",
+                scrollTrigger: {
+                  trigger: card,
+                  containerAnimation: horizontalTween,
+                  start: "left 90%",
+                  end: "left 25%",
+                  scrub: 1.2,
+                },
+              }
+            );
+          }
+        });
       });
     },
-    { scope: wrapperRef },
+    { scope: wrapperRef }
   );
 
   return (
     <div ref={wrapperRef} id="work" data-section="projects">
       {/* Section heading — scrolls naturally before pin */}
-      <section className="relative w-full pt-24 sm:pt-32 md:pt-40 pb-10 sm:pb-14 md:pb-16">
+      <section data-proj-header className="relative w-full pt-24 sm:pt-32 md:pt-40 pb-10 sm:pb-14 md:pb-16">
         <div className="relative z-10 w-full max-w-[1200px] mx-auto px-5 sm:px-6 md:px-12">
           {/* Subtitle */}
           <div className="flex items-center gap-3 mb-5">
@@ -277,10 +324,12 @@ export default function WorkPreview() {
       {/* Pinned horizontal scroll viewport — desktop */}
       <div
         ref={pinSectionRef}
+        data-pin-section
         className="hidden md:flex relative w-full h-screen items-center overflow-hidden"
       >
         <div
           ref={trackRef}
+          data-project-track
           className="flex items-center gap-6 lg:gap-10 px-[5vw]"
           style={{ width: "max-content" }}
         >

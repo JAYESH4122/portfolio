@@ -2,7 +2,10 @@
 
 import { useRef } from "react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface TextRevealProps {
   text: string;
@@ -34,6 +37,11 @@ export default function TextReveal({
         stagger,
         delay,
         ease: "power2.out",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 90%",
+          toggleActions: "play none none none",
+        },
       });
     },
     { scope: containerRef }

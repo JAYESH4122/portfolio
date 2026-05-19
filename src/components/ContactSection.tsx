@@ -221,7 +221,7 @@ export default function ContactSection() {
       data-section="contact"
       className="relative w-full py-24 sm:py-32 md:py-40 overflow-hidden"
     >
-      <div className="relative z-10 w-full max-w-[1200px] mx-auto px-5 sm:px-6 md:px-12">
+      <div data-contact-inner className="relative z-10 w-full max-w-[1200px] mx-auto px-5 sm:px-6 md:px-12">
         {/* Section heading */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}

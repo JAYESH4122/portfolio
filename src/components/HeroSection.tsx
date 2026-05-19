@@ -44,7 +44,7 @@ const lineReveal = {
 
 export default function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
-  const innerRef = useRef<HTMLDivElement>(null);
+  const parallaxRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
@@ -57,12 +57,11 @@ export default function HeroSection() {
             scrub: 1.2,
           },
         })
-        .to(innerRef.current, {
-          y: -50,
-          scale: 0.96,
-          opacity: 0,
-          ease: "none",
-        });
+        .fromTo(
+          parallaxRef.current,
+          { y: 0, scale: 1, opacity: 1 },
+          { y: -50, scale: 0.96, opacity: 0, ease: "none" },
+        );
     },
     { scope: sectionRef },
   );
@@ -73,13 +72,13 @@ export default function HeroSection() {
       data-section="hero"
       className="relative min-h-screen w-full flex items-center justify-center overflow-hidden"
     >
-      <motion.div
-        ref={innerRef}
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="relative z-10 w-full max-w-[1200px] mx-auto px-5 sm:px-6 md:px-12 py-20 md:py-0"
-      >
+      <div ref={parallaxRef} className="relative z-10 w-full max-w-[1200px] mx-auto px-5 sm:px-6 md:px-12 py-20 md:py-0">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+        >
         {/* Tactical HUD header */}
         <motion.div
           variants={itemVariants}
@@ -269,7 +268,8 @@ export default function HeroSection() {
             Op_Sector: India
           </span>
         </motion.div>
-      </motion.div>
+        </motion.div>
+      </div>
 
       <ScrollIndicator />
     </section>
