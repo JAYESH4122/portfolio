@@ -94,7 +94,7 @@ export default function HeroSection() {
               Contractor_ID: Baba_Yaga
             </span>
           </div>
-          <span className="text-[9px] sm:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.25em] text-white/20 font-mono flex-shrink-0 hidden xs:inline sm:inline">
+          <span className="text-[9px] sm:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.25em] text-zinc-500 font-mono flex-shrink-0 hidden xs:inline sm:inline">
             Clearance: Level_5
           </span>
         </motion.div>
@@ -138,7 +138,7 @@ export default function HeroSection() {
                 <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-white/60 shadow-[0_0_8px_rgba(255,255,255,0.3)]" />
                 <span
                   style={{ fontFamily: "var(--font-geo), sans-serif" }}
-                  className="text-[10px] sm:text-[11px] tracking-wide text-white/60"
+                  className="text-[10px] sm:text-[11px] tracking-wide text-zinc-300"
                 >
                   Full Stack Scope
                 </span>
@@ -179,7 +179,7 @@ export default function HeroSection() {
               <TextReveal
                 text="A software engineer bridging the gap between high-end aesthetic design and robust full-stack architecture. Crafting immersive web applications, scalable platforms, and pixel-perfect interactive experiences from concept to production."
                 style={{ fontFamily: "var(--font-geo), sans-serif" }}
-                className="text-[13px] sm:text-base md:text-lg text-white/50 leading-relaxed max-w-2xl"
+                className="text-[13px] sm:text-base md:text-lg text-zinc-300 font-medium sm:font-normal leading-relaxed sm:leading-relaxed max-w-2xl"
               />
             </motion.div>
 
@@ -240,7 +240,7 @@ export default function HeroSection() {
               {/* Photo placeholder */}
               <div className="absolute inset-px bg-white/3 overflow-hidden">
                 <div className="w-full h-full bg-linear-to-br from-white/5 to-transparent flex items-center justify-center">
-                  <span className="text-[10px] text-white/20 font-mono uppercase tracking-widest">
+                  <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest">
                     [Photo]
                   </span>
                 </div>
@@ -248,7 +248,7 @@ export default function HeroSection() {
 
               {/* Corner label */}
               <div className="absolute -bottom-5 sm:-bottom-6 left-0 right-0 text-center">
-                <span className="text-[8px] sm:text-[9px] uppercase tracking-[0.2em] sm:tracking-[0.3em] text-white/20 font-mono">
+                <span className="text-[8px] sm:text-[9px] uppercase tracking-[0.2em] sm:tracking-[0.3em] text-zinc-500 font-mono">
                   Verified // Active Agent
                 </span>
               </div>
@@ -261,7 +261,7 @@ export default function HeroSection() {
           variants={itemVariants}
           className="mt-10 sm:mt-16 md:mt-20 flex items-center justify-between border-t border-white/5 pt-3 sm:pt-4"
         >
-          <span className="text-[9px] sm:text-[10px] text-white/30 font-mono tracking-[0.15em] sm:tracking-[0.2em] uppercase hidden md:block">
+          <span className="text-[9px] sm:text-[10px] text-zinc-500 font-mono tracking-[0.15em] sm:tracking-[0.2em] uppercase hidden md:block">
             Network: Continental_Grid
           </span>
           <span className="text-[9px] sm:text-[10px] text-emerald-400/60 font-mono tracking-[0.15em] sm:tracking-[0.2em] uppercase">

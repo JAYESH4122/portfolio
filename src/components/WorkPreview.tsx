@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -57,13 +57,27 @@ const projects: ProjectItem[] = [
 
 function ProjectCard({ project, index }: { project: ProjectItem; index: number }) {
   const [hovered, setHovered] = useState(false);
+  const touchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleTouchStart = useCallback(() => {
+    if (touchTimeoutRef.current) clearTimeout(touchTimeoutRef.current);
+    setHovered(true);
+    touchTimeoutRef.current = setTimeout(() => setHovered(false), 2500);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (touchTimeoutRef.current) clearTimeout(touchTimeoutRef.current);
+    };
+  }, []);
 
   return (
     <div
       data-project-card
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="project-card relative flex-shrink-0 w-full md:w-[50vw] lg:w-[40vw] md:h-[75vh] md:min-h-[480px] md:max-h-[620px] rounded-lg border border-white/[0.06] bg-white/[0.01] backdrop-blur-md overflow-hidden group cursor-crosshair"
+      onTouchStart={handleTouchStart}
+      className="project-card relative flex-shrink-0 w-full md:w-[50vw] lg:w-[40vw] md:h-[75vh] md:min-h-[480px] md:max-h-[620px] rounded-lg border border-white/[0.06] bg-white/[0.01] backdrop-blur-md overflow-hidden group cursor-crosshair touch-manipulation"
     >
       {/* Background grid pattern */}
       <div
@@ -87,13 +101,13 @@ function ProjectCard({ project, index }: { project: ProjectItem; index: number }
       />
 
       {/* Corner tactical markers */}
-      <span className="absolute top-3 left-3 text-[9px] font-mono text-white/30 leading-none">+</span>
-      <span className="absolute top-3 right-3 text-[9px] font-mono text-white/30 leading-none">+</span>
-      <span className="absolute bottom-3 left-3 text-[9px] font-mono text-white/30 leading-none">+</span>
-      <span className="absolute bottom-3 right-3 text-[9px] font-mono text-white/30 leading-none">+</span>
+      <span className="absolute top-3 left-3 text-[9px] font-mono text-zinc-500 leading-none">+</span>
+      <span className="absolute top-3 right-3 text-[9px] font-mono text-zinc-500 leading-none">+</span>
+      <span className="absolute bottom-3 left-3 text-[9px] font-mono text-zinc-500 leading-none">+</span>
+      <span className="absolute bottom-3 right-3 text-[9px] font-mono text-zinc-500 leading-none">+</span>
 
       {/* Asset code top-right */}
-      <span className="absolute top-5 right-6 text-[8px] font-mono text-white/10 tracking-[0.3em]">
+      <span className="absolute top-5 right-6 text-[8px] font-mono text-zinc-600 tracking-[0.3em]">
         {project.assetCode}
       </span>
 
@@ -108,7 +122,7 @@ function ProjectCard({ project, index }: { project: ProjectItem; index: number }
             </span>
           </span>
           <div className="h-px flex-1 bg-linear-to-r from-white/8 to-transparent" />
-          <span className="text-[9px] font-mono text-white/20 tracking-[0.15em]">
+          <span className="text-[9px] font-mono text-zinc-500 tracking-[0.15em]">
             [{String(index + 1).padStart(2, "0")}/03]
           </span>
         </div>
@@ -123,7 +137,7 @@ function ProjectCard({ project, index }: { project: ProjectItem; index: number }
             }}
           >
             <div className="w-full h-full bg-linear-to-br from-violet-900/20 via-pink-900/10 to-cyan-900/20 flex items-center justify-center">
-              <span className="text-[10px] text-white/20 font-mono uppercase tracking-[0.3em]">
+              <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-[0.3em]">
                 [Mockup // {project.title}]
               </span>
             </div>
@@ -158,13 +172,13 @@ function ProjectCard({ project, index }: { project: ProjectItem; index: number }
           </h3>
           <span
             style={{ fontFamily: "var(--font-geo), sans-serif" }}
-            className="text-[11px] sm:text-xs text-violet-400/70 tracking-wide mb-4 block"
+            className="text-[11px] sm:text-xs text-violet-300/90 tracking-wide mb-4 block"
           >
             {project.role}
           </span>
 
           {/* Description */}
-          <p className="text-[11px] sm:text-xs text-white/40 leading-relaxed font-mono mb-auto max-w-md">
+          <p className="text-[11px] sm:text-xs text-zinc-400 font-medium sm:font-normal leading-relaxed sm:leading-loose font-mono mb-auto max-w-md">
             {project.description}
           </p>
 
@@ -173,7 +187,7 @@ function ProjectCard({ project, index }: { project: ProjectItem; index: number }
             {project.tech.map((t) => (
               <span
                 key={t}
-                className="px-2 py-0.5 rounded border border-white/[0.06] bg-white/[0.02] text-[9px] font-mono uppercase tracking-wider text-white/35 group-hover:text-white/55 group-hover:border-white/10 transition-all duration-300"
+                className="px-2 py-0.5 rounded border border-white/10 bg-white/[0.03] text-[9px] font-mono uppercase tracking-wider text-zinc-400 group-hover:text-zinc-200 group-hover:border-white/15 transition-all duration-300"
               >
                 {t}
               </span>
@@ -192,7 +206,7 @@ function ProjectCard({ project, index }: { project: ProjectItem; index: number }
           </a>
           <a
             href={project.sourceUrl}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded border border-white/[0.08] bg-white/[0.02] text-[10px] font-mono uppercase tracking-[0.2em] text-white/40 hover:bg-white/[0.05] hover:border-white/20 hover:text-white/70 transition-all duration-300"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded border border-white/10 bg-white/[0.02] text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-400 hover:bg-white/[0.05] hover:border-white/20 hover:text-white/80 transition-all duration-300"
           >
             <span className="w-1 h-1 rounded-full bg-white/40" />
             View Source
@@ -287,7 +301,7 @@ export default function WorkPreview() {
           {/* Subtitle */}
           <div className="flex items-center gap-3 mb-5">
             <div className="h-px flex-1 max-w-12 bg-linear-to-r from-transparent to-white/20" />
-            <span className="text-[8px] sm:text-[9px] uppercase tracking-[0.3em] text-white/30 font-mono">
+            <span className="text-[8px] sm:text-[9px] uppercase tracking-[0.3em] text-zinc-400 font-medium sm:font-normal font-mono">
               Portfolio // Selected Works
             </span>
             <div className="h-px flex-1 max-w-12 bg-linear-to-l from-transparent to-white/20" />
@@ -296,12 +310,12 @@ export default function WorkPreview() {
           {/* Main title */}
           <h2
             style={{ fontFamily: "var(--font-passero), sans-serif" }}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-center bg-linear-to-r from-white/90 via-white/70 to-white/50 bg-clip-text text-transparent mb-4"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-center bg-linear-to-r from-white via-white/80 to-white/60 bg-clip-text text-transparent mb-4 leading-none"
           >
             Featured Projects
           </h2>
 
-          <p className="text-center text-[10px] sm:text-[11px] font-mono text-white/20 tracking-[0.15em] uppercase mb-8 sm:mb-10">
+          <p className="text-center text-[10px] sm:text-[11px] font-mono text-zinc-400 tracking-[0.15em] uppercase mb-8 sm:mb-10">
             Production applications &mdash; concept to deployment
           </p>
 
@@ -340,7 +354,7 @@ export default function WorkPreview() {
           {/* End marker */}
           <div className="flex-shrink-0 flex flex-col items-center justify-center w-[200px]">
             <div className="w-px h-20 bg-linear-to-b from-transparent via-white/10 to-transparent mb-4" />
-            <span className="text-[8px] font-mono text-white/15 tracking-[0.4em] uppercase">
+            <span className="text-[8px] font-mono text-zinc-500 tracking-[0.4em] uppercase">
               End of List
             </span>
             <div className="w-px h-20 bg-linear-to-b from-transparent via-white/10 to-transparent mt-4" />
@@ -358,7 +372,7 @@ export default function WorkPreview() {
       {/* Bottom classification */}
       <div className="relative z-10 flex items-center justify-center gap-4 py-16 md:py-24">
         <div className="h-px w-12 bg-linear-to-r from-transparent to-white/10" />
-        <span className="text-[7px] font-mono text-white/15 tracking-[0.4em] uppercase">
+        <span className="text-[7px] font-mono text-zinc-500 tracking-[0.4em] uppercase">
           Portfolio Status: Current
         </span>
         <div className="h-px w-12 bg-linear-to-l from-transparent to-white/10" />

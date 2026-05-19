@@ -20,14 +20,14 @@ function TerminalField({ label, id, type = "text", placeholder, value, onChange,
   const [focused, setFocused] = useState(false);
 
   const shared =
-    "relative w-full bg-white/[0.02] text-sm text-white/80 font-mono tracking-wide placeholder:text-white/15 border-b transition-colors duration-300 outline-none px-4 py-3 sm:py-3.5";
+    "relative w-full bg-white/[0.02] text-sm text-white/90 font-mono tracking-wide placeholder:text-zinc-600 border-b transition-colors duration-300 outline-none px-4 py-3 sm:py-3.5";
   const borderClass = focused ? "border-emerald-400/80" : "border-white/10";
 
   return (
     <div className="relative group">
       <label
         htmlFor={id}
-        className="block text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.25em] text-white/30 mb-2"
+        className="block text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.25em] text-zinc-400 mb-2"
       >
         {label}
       </label>
@@ -185,11 +185,11 @@ function ChannelLink({ channel }: { channel: (typeof channels)[number] }) {
         <span className="block text-xs font-mono text-white/60 group-hover:text-white/80 transition-colors duration-300 tracking-wide">
           {channel.label}
         </span>
-        <span className="block text-[8px] font-mono text-white/20 tracking-[0.2em] uppercase mt-0.5">
+        <span className="block text-[8px] font-mono text-zinc-500 tracking-[0.2em] uppercase mt-0.5">
           {channel.code}
         </span>
       </div>
-      <svg className="w-3.5 h-3.5 text-white/15 group-hover:text-white/40 transition-colors duration-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <svg className="w-3.5 h-3.5 text-zinc-600 group-hover:text-zinc-400 transition-colors duration-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
       </svg>
     </a>
@@ -231,7 +231,7 @@ export default function ContactSection() {
         >
           <div className="flex items-center gap-3 mb-5">
             <div className="h-px flex-1 max-w-12 bg-linear-to-r from-transparent to-white/20" />
-            <span className="text-[8px] sm:text-[9px] uppercase tracking-[0.3em] text-white/30 font-mono">
+            <span className="text-[8px] sm:text-[9px] uppercase tracking-[0.3em] text-zinc-400 font-medium sm:font-normal font-mono">
               Contact // Open for Work
             </span>
             <div className="h-px flex-1 max-w-12 bg-linear-to-l from-transparent to-white/20" />
@@ -239,12 +239,12 @@ export default function ContactSection() {
 
           <h2
             style={{ fontFamily: "var(--font-passero), sans-serif" }}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-center bg-linear-to-r from-white/90 via-white/70 to-white/50 bg-clip-text text-transparent mb-4"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-center bg-linear-to-r from-white via-white/80 to-white/60 bg-clip-text text-transparent mb-4 leading-none"
           >
             Get In Touch
           </h2>
 
-          <p className="text-center text-[10px] sm:text-[11px] font-mono text-white/20 tracking-[0.15em] uppercase">
+          <p className="text-center text-[10px] sm:text-[11px] font-mono text-zinc-400 tracking-[0.15em] uppercase">
             Have a project in mind? &mdash; let&apos;s build something great
           </p>
 
@@ -285,7 +285,7 @@ export default function ContactSection() {
                 <h3 className="text-lg font-mono text-white/80 tracking-wide mb-2">
                   Message Sent
                 </h3>
-                <p className="text-[11px] font-mono text-white/30 tracking-wide max-w-sm">
+                <p className="text-[11px] font-mono text-zinc-400 tracking-wide max-w-sm">
                   Your message has been received successfully. Expect a response within 24 hours.
                 </p>
                 <span className="mt-6 text-[8px] font-mono text-emerald-400/50 tracking-[0.3em] uppercase">
@@ -296,10 +296,10 @@ export default function ContactSection() {
               <div className="space-y-6">
                 {/* Form header */}
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-[8px] font-mono text-white/20 tracking-[0.25em] uppercase">
+                  <span className="text-[8px] font-mono text-zinc-400 tracking-[0.25em] uppercase">
                     New Message
                   </span>
-                  <span className="text-[8px] font-mono text-emerald-400/40 tracking-[0.2em] uppercase">
+                  <span className="text-[8px] font-mono text-emerald-400/70 tracking-[0.2em] uppercase">
                     ● Available
                   </span>
                 </div>
@@ -355,7 +355,7 @@ export default function ContactSection() {
                     )}
                   </MagneticButton>
 
-                  <span className="text-[8px] font-mono text-white/15 tracking-wider hidden sm:inline">
+                  <span className="text-[8px] font-mono text-zinc-500 tracking-wider hidden sm:inline">
                     Secure // Verified
                   </span>
                 </div>
@@ -366,7 +366,7 @@ export default function ContactSection() {
           {/* Right — Channels */}
           <div className="space-y-6">
             <div className="flex items-center gap-2 mb-2">
-              <span className="text-[8px] font-mono text-white/20 tracking-[0.25em] uppercase">
+              <span className="text-[8px] font-mono text-zinc-400 tracking-[0.25em] uppercase">
                 Connect
               </span>
               <div className="h-px flex-1 bg-linear-to-r from-white/8 to-transparent" />
@@ -396,7 +396,7 @@ export default function ContactSection() {
               />
 
               {/* Corner file-size tag */}
-              <span className="absolute top-3 right-3 text-[7px] font-mono text-white/15 tracking-[0.2em] pointer-events-none">
+              <span className="absolute top-3 right-3 text-[7px] font-mono text-zinc-600 tracking-[0.2em] pointer-events-none">
                 FILE_SIZE // 142KB
               </span>
 
@@ -416,7 +416,7 @@ export default function ContactSection() {
                   <span className="block text-xs font-mono text-white/70 group-hover:text-white/90 transition-colors duration-300 tracking-wide">
                     Download Resume
                   </span>
-                  <span className="block text-[9px] font-mono text-white/25 tracking-wide mt-0.5">
+                  <span className="block text-[9px] font-mono text-zinc-500 tracking-wide mt-0.5">
                     Complete curriculum vitae [PDF]
                   </span>
                 </div>
@@ -439,7 +439,7 @@ export default function ContactSection() {
                   System Online
                 </span>
               </div>
-              <div className="space-y-1.5 text-[8px] font-mono text-white/20 tracking-wider">
+              <div className="space-y-1.5 text-[8px] font-mono text-zinc-400 tracking-wider">
                 <p>Response_Time: &lt; 24h</p>
                 <p>Timezone: IST (UTC+5:30)</p>
                 <p>Availability: Open_to_Work</p>
@@ -449,7 +449,7 @@ export default function ContactSection() {
             {/* Bottom marker */}
             <div className="pt-4 flex items-center gap-2">
               <div className="h-px flex-1 bg-linear-to-r from-white/6 to-transparent" />
-              <span className="text-[7px] font-mono text-white/10 tracking-[0.3em] uppercase">
+              <span className="text-[7px] font-mono text-zinc-600 tracking-[0.3em] uppercase">
                 EOF
               </span>
             </div>

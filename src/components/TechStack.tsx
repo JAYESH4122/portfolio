@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { motion, useInView } from "framer-motion";
 import {
   SiNextdotjs,
@@ -31,6 +31,7 @@ interface TechItem {
   name: string;
   icon: IconType;
   color: string;
+  colorRgb: string;
   code: string;
 }
 
@@ -49,12 +50,12 @@ const categories: TechCategory[] = [
     accent: "text-violet-400",
     accentRgb: "167,139,250",
     items: [
-      { name: "Next.js", icon: SiNextdotjs, color: "#ffffff", code: "NXT.15" },
-      { name: "React", icon: SiReact, color: "#61DAFB", code: "RCT.19" },
-      { name: "Remix", icon: SiRemix, color: "#ffffff", code: "RMX.02" },
-      { name: "TypeScript", icon: SiTypescript, color: "#3178C6", code: "TS.5.4" },
-      { name: "JavaScript", icon: SiJavascript, color: "#F7DF1E", code: "JS.ES6" },
-      { name: "Tailwind CSS", icon: SiTailwindcss, color: "#06B6D4", code: "TW.4.0" },
+      { name: "Next.js", icon: SiNextdotjs, color: "#ffffff", colorRgb: "255,255,255", code: "NXT.15" },
+      { name: "React", icon: SiReact, color: "#61DAFB", colorRgb: "97,218,251", code: "RCT.19" },
+      { name: "Remix", icon: SiRemix, color: "#ffffff", colorRgb: "255,255,255", code: "RMX.02" },
+      { name: "TypeScript", icon: SiTypescript, color: "#3178C6", colorRgb: "49,120,198", code: "TS.5.4" },
+      { name: "JavaScript", icon: SiJavascript, color: "#F7DF1E", colorRgb: "247,223,30", code: "JS.ES6" },
+      { name: "Tailwind CSS", icon: SiTailwindcss, color: "#06B6D4", colorRgb: "6,182,212", code: "TW.4.0" },
     ],
   },
   {
@@ -63,10 +64,10 @@ const categories: TechCategory[] = [
     accent: "text-emerald-400",
     accentRgb: "52,211,153",
     items: [
-      { name: "GSAP", icon: SiGreensock, color: "#88CE02", code: "GS.3.12" },
-      { name: "Framer Motion", icon: SiFramer, color: "#0055FF", code: "FM.11" },
-      { name: "Three.js", icon: SiThreedotjs, color: "#ffffff", code: "3JS.R16" },
-      { name: "React Three Fiber", icon: SiReact, color: "#61DAFB", code: "R3F.8.0" },
+      { name: "GSAP", icon: SiGreensock, color: "#88CE02", colorRgb: "136,206,2", code: "GS.3.12" },
+      { name: "Framer Motion", icon: SiFramer, color: "#0055FF", colorRgb: "0,85,255", code: "FM.11" },
+      { name: "Three.js", icon: SiThreedotjs, color: "#ffffff", colorRgb: "255,255,255", code: "3JS.R16" },
+      { name: "React Three Fiber", icon: SiReact, color: "#61DAFB", colorRgb: "97,218,251", code: "R3F.8.0" },
     ],
   },
   {
@@ -75,10 +76,10 @@ const categories: TechCategory[] = [
     accent: "text-amber-400",
     accentRgb: "251,191,36",
     items: [
-      { name: "Node.js", icon: SiNodedotjs, color: "#339933", code: "ND.22" },
-      { name: "Express.js", icon: SiExpress, color: "#ffffff", code: "EX.4.19" },
-      { name: "Java", icon: FaJava, color: "#ED8B00", code: "JV.21" },
-      { name: "REST API", icon: TbApi, color: "#FF6C37", code: "API.V2" },
+      { name: "Node.js", icon: SiNodedotjs, color: "#339933", colorRgb: "51,153,51", code: "ND.22" },
+      { name: "Express.js", icon: SiExpress, color: "#ffffff", colorRgb: "255,255,255", code: "EX.4.19" },
+      { name: "Java", icon: FaJava, color: "#ED8B00", colorRgb: "237,139,0", code: "JV.21" },
+      { name: "REST API", icon: TbApi, color: "#FF6C37", colorRgb: "255,108,55", code: "API.V2" },
     ],
   },
   {
@@ -87,10 +88,10 @@ const categories: TechCategory[] = [
     accent: "text-pink-400",
     accentRgb: "244,114,182",
     items: [
-      { name: "MongoDB", icon: SiMongodb, color: "#47A248", code: "MG.7.0" },
-      { name: "PostgreSQL", icon: SiPostgresql, color: "#4169E1", code: "PG.16" },
-      { name: "Mongoose", icon: SiMongoose, color: "#880000", code: "MGS.8" },
-      { name: "Prisma", icon: SiPrisma, color: "#2D3748", code: "PRM.5" },
+      { name: "MongoDB", icon: SiMongodb, color: "#47A248", colorRgb: "71,162,72", code: "MG.7.0" },
+      { name: "PostgreSQL", icon: SiPostgresql, color: "#4169E1", colorRgb: "65,105,225", code: "PG.16" },
+      { name: "Mongoose", icon: SiMongoose, color: "#A03030", colorRgb: "160,48,48", code: "MGS.8" },
+      { name: "Prisma", icon: SiPrisma, color: "#5A67D8", colorRgb: "90,103,216", code: "PRM.5" },
     ],
   },
   {
@@ -99,10 +100,10 @@ const categories: TechCategory[] = [
     accent: "text-cyan-400",
     accentRgb: "34,211,238",
     items: [
-      { name: "Git", icon: SiGit, color: "#F05032", code: "GIT.2.4" },
-      { name: "GitHub", icon: SiGithub, color: "#ffffff", code: "GH.ENT" },
-      { name: "Docker", icon: SiDocker, color: "#2496ED", code: "DKR.25" },
-      { name: "Vercel", icon: SiVercel, color: "#ffffff", code: "VCL.PRO" },
+      { name: "Git", icon: SiGit, color: "#F05032", colorRgb: "240,80,50", code: "GIT.2.4" },
+      { name: "GitHub", icon: SiGithub, color: "#ffffff", colorRgb: "255,255,255", code: "GH.ENT" },
+      { name: "Docker", icon: SiDocker, color: "#2496ED", colorRgb: "36,150,237", code: "DKR.25" },
+      { name: "Vercel", icon: SiVercel, color: "#ffffff", colorRgb: "255,255,255", code: "VCL.PRO" },
     ],
   },
 ];
@@ -190,14 +191,19 @@ function TechIcon({
   item,
   accentRgb,
   index,
+  isActive,
+  onActivate,
 }: {
   item: TechItem;
   accentRgb: string;
   index: number;
+  isActive: boolean;
+  onActivate: () => void;
 }) {
   const [hovered, setHovered] = useState(false);
+  const active = hovered || isActive;
   const Icon = item.icon;
-  const scrambledName = useTextScramble(item.name, hovered);
+  const scrambledName = useTextScramble(item.name, active);
 
   const floatDelay = index * 0.7;
   const floatDuration = 3 + (index % 3) * 0.8;
@@ -206,6 +212,8 @@ function TechIcon({
     <motion.div
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
+      onTapStart={onActivate}
+      whileTap={{ scale: 0.96 }}
       animate={{
         y: [0, -3, 0],
         opacity: [0.85, 1, 0.85],
@@ -214,54 +222,60 @@ function TechIcon({
         y: { duration: floatDuration, repeat: Infinity, ease: "easeInOut", delay: floatDelay },
         opacity: { duration: floatDuration + 1, repeat: Infinity, ease: "easeInOut", delay: floatDelay },
       }}
-      className="group relative flex flex-col items-center gap-2 sm:gap-3 p-3 sm:p-4 cursor-crosshair"
+      className="group relative flex flex-col items-center gap-2 sm:gap-3 p-3 sm:p-4 cursor-crosshair touch-manipulation"
     >
       {/* Icon container with target-lock */}
       <div className="relative">
-        {/* Radial glow on hover */}
+        {/* Per-icon radial glow — uses icon brand color, not category accent */}
         <motion.div
-          animate={hovered ? { opacity: 1, scale: 1.4 } : { opacity: 0, scale: 0.8 }}
-          transition={{ duration: 0.3 }}
+          animate={active ? { opacity: 1, scale: 1.6 } : { opacity: 0, scale: 0.8 }}
+          transition={{ duration: active ? 0.12 : 0.35 }}
           className="absolute inset-0 rounded-xl pointer-events-none"
           style={{
-            background: `radial-gradient(circle, rgba(${accentRgb}, 0.25) 0%, transparent 70%)`,
+            background: `radial-gradient(circle, rgba(${item.colorRgb}, 0.3) 0%, rgba(${item.colorRgb}, 0.08) 50%, transparent 75%)`,
           }}
         />
 
         {/* Main icon box */}
         <motion.div
-          animate={hovered ? { borderColor: `rgba(${accentRgb}, 0.4)` } : { borderColor: "rgba(255,255,255,0.06)" }}
-          transition={{ duration: 0.2 }}
-          className="relative z-10 flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-lg bg-white/2 border backdrop-blur-sm overflow-hidden"
+          animate={
+            active
+              ? { borderColor: `rgba(${item.colorRgb}, 0.5)`, boxShadow: `0 0 20px rgba(${item.colorRgb}, 0.15), inset 0 0 12px rgba(${item.colorRgb}, 0.05)` }
+              : { borderColor: "rgba(255,255,255,0.08)", boxShadow: "0 0 0px rgba(0,0,0,0)" }
+          }
+          transition={{ duration: active ? 0.1 : 0.25 }}
+          className="relative z-10 flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-lg bg-white/[0.03] border backdrop-blur-sm overflow-hidden"
         >
           {/* Crosshair corners */}
-          <Crosshairs visible={hovered} />
+          <Crosshairs visible={active} />
 
-          {/* Scan line on hover */}
+          {/* Scan line on active */}
           <motion.div
-            animate={hovered ? { y: ["−100%", "200%"] } : { y: "-100%" }}
-            transition={{ duration: 1.2, ease: "linear", repeat: hovered ? Infinity : 0 }}
+            animate={active ? { y: ["-100%", "200%"] } : { y: "-100%" }}
+            transition={{ duration: 1.2, ease: "linear", repeat: active ? Infinity : 0 }}
             className="absolute inset-x-0 h-px pointer-events-none"
-            style={{ background: `rgba(${accentRgb}, 0.3)` }}
+            style={{ background: `rgba(${item.colorRgb}, 0.4)` }}
           />
 
           <Icon
-            className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 transition-all duration-300 relative z-10"
+            className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 relative z-10 transition-[color,filter] duration-300 ease-out"
             style={{
-              color: hovered ? item.color : "rgba(255,255,255,0.5)",
-              filter: hovered ? `drop-shadow(0 0 8px ${item.color}40)` : "none",
+              color: active ? item.color : `rgba(${item.colorRgb}, 0.55)`,
+              filter: active
+                ? `drop-shadow(0 0 6px rgba(${item.colorRgb}, 0.7)) drop-shadow(0 0 14px rgba(${item.colorRgb}, 0.35))`
+                : "none",
             }}
           />
 
           {/* Asset code micro-text */}
-          <span className="absolute bottom-0.5 right-1 text-[6px] font-mono text-white/10 group-hover:text-white/30 transition-colors duration-300 pointer-events-none">
+          <span className={`absolute bottom-0.5 right-1 text-[6px] font-mono transition-colors duration-300 pointer-events-none ${active ? "text-zinc-300" : "text-zinc-600"}`}>
             {item.code}
           </span>
         </motion.div>
       </div>
 
       {/* Label with scramble effect */}
-      <span className="text-[9px] sm:text-[10px] font-mono tracking-wider text-white/40 group-hover:text-white/90 transition-colors duration-300 uppercase text-center min-w-[48px]">
+      <span className={`text-[9px] sm:text-[10px] font-mono tracking-wider transition-colors duration-300 uppercase text-center min-w-[48px] ${active ? "text-white" : "text-zinc-400"}`}>
         {scrambledName}
       </span>
     </motion.div>
@@ -278,6 +292,20 @@ function CategoryCard({
   inView: boolean;
 }) {
   const isPrimary = category.sysCode === "FE_SYS";
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleActivate = useCallback((i: number) => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setActiveIndex(i);
+    timeoutRef.current = setTimeout(() => setActiveIndex(null), 1800);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   return (
     <motion.div
@@ -306,7 +334,7 @@ function CategoryCard({
       />
 
       {/* Top-right system code */}
-      <span className="absolute top-3 right-4 text-[7px] font-mono text-white/10 tracking-[0.3em] pointer-events-none">
+      <span className="absolute top-3 right-4 text-[7px] font-mono text-zinc-600 tracking-[0.3em] pointer-events-none">
         {category.sysCode}
       </span>
 
@@ -330,7 +358,7 @@ function CategoryCard({
 
         <div className="flex-1 h-px bg-linear-to-r from-white/8 to-transparent" />
 
-        <span className="text-[7px] font-mono text-white/20 tracking-widest">
+        <span className="text-[7px] font-mono text-zinc-500 tracking-widest">
           [{String(category.items.length).padStart(2, "0")} MODULES]
         </span>
       </div>
@@ -344,16 +372,23 @@ function CategoryCard({
         }`}
       >
         {category.items.map((item, i) => (
-          <TechIcon key={item.name} item={item} accentRgb={category.accentRgb} index={i} />
+          <TechIcon
+            key={item.name}
+            item={item}
+            accentRgb={category.accentRgb}
+            index={i}
+            isActive={activeIndex === i}
+            onActivate={() => handleActivate(i)}
+          />
         ))}
       </div>
 
       {/* Bottom classification bar */}
-      <div className="mt-4 pt-3 border-t border-white/4 flex items-center justify-between">
-        <span className="text-[7px] font-mono text-white/15 tracking-widest">
+      <div className="mt-4 pt-3 border-t border-white/8 flex items-center justify-between">
+        <span className="text-[7px] font-mono text-zinc-500 tracking-widest">
           SYS.LNK // {String(index + 1).padStart(2, "0")}
         </span>
-        <span className="text-[7px] font-mono text-white/15 tracking-widest">
+        <span className="text-[7px] font-mono text-zinc-500 tracking-widest">
           STATUS: ACTIVE
         </span>
       </div>
@@ -382,7 +417,7 @@ export default function TechStack() {
         >
           <div className="flex items-center gap-3 mb-4">
             <div className="h-px flex-1 max-w-16 bg-linear-to-r from-transparent to-white/20" />
-            <span className="text-[8px] sm:text-[9px] uppercase tracking-[0.3em] text-white/30 font-mono">
+            <span className="text-[8px] sm:text-[9px] uppercase tracking-[0.3em] text-zinc-400 font-medium sm:font-normal font-mono">
               Technical // Stack Overview
             </span>
             <div className="h-px flex-1 max-w-16 bg-linear-to-l from-transparent to-white/20" />
@@ -390,12 +425,12 @@ export default function TechStack() {
 
           <h2
             style={{ fontFamily: "var(--font-passero), sans-serif" }}
-            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-center bg-linear-to-r from-white/90 via-white/70 to-white/50 bg-clip-text text-transparent"
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-center bg-linear-to-r from-white via-white/80 to-white/60 bg-clip-text text-transparent leading-none"
           >
             Tech Stack
           </h2>
 
-          <p className="text-center text-[10px] sm:text-[11px] font-mono text-white/20 mt-3 tracking-[0.15em] uppercase">
+          <p className="text-center text-[10px] sm:text-[11px] font-mono text-zinc-400 mt-3 tracking-[0.15em] uppercase">
             Tools of the trade &mdash; production-tested & deployment-ready
           </p>
         </motion.div>
@@ -420,7 +455,7 @@ export default function TechStack() {
           className="mt-8 sm:mt-12 flex items-center justify-center gap-4"
         >
           <div className="h-px w-12 bg-linear-to-r from-transparent to-white/10" />
-          <span className="text-[7px] font-mono text-white/15 tracking-[0.4em] uppercase">
+          <span className="text-[7px] font-mono text-zinc-500 tracking-[0.4em] uppercase">
             End of Stack Overview
           </span>
           <div className="h-px w-12 bg-linear-to-l from-transparent to-white/10" />
