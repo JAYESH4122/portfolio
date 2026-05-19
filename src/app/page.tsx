@@ -9,6 +9,7 @@ import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import WorkPreview from "@/components/WorkPreview";
 import TechStack from "@/components/TechStack";
+import ContactSection from "@/components/ContactSection";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -140,6 +141,7 @@ export default function Home() {
 
       <TechStack />
       <WorkPreview />
+      <ContactSection />
     </main>
   );
 }

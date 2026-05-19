@@ -1,119 +1,199 @@
 "use client";
 
-import { useRef } from "react";
-import type { IconType } from "react-icons";
-import {
-  SiD3,
-  SiNextdotjs,
-  SiNodedotjs,
-  SiOpenai,
-  SiPython,
-  SiReact,
-  SiStripe,
-} from "react-icons/si";
+import { useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { motion } from "framer-motion";
 
 gsap.registerPlugin(ScrollTrigger);
 
-type StackEntry = {
-  label: string;
-  Icon: IconType;
-  /** Brand color for icon */
-  color: string;
-};
-
-const projects: {
+interface ProjectItem {
   title: string;
-  id: string;
+  role: string;
+  description: string;
+  tech: string[];
+  assetCode: string;
   status: string;
-  stack: StackEntry[];
-}[] = [
+  demoUrl: string;
+  sourceUrl: string;
+}
+
+const projects: ProjectItem[] = [
   {
-    title: "E-Commerce Platform",
-    id: "PRJ_001",
-    status: "Deployed",
-    stack: [
-      { label: "Next.js", Icon: SiNextdotjs, color: "#ffffff" },
-      { label: "Stripe", Icon: SiStripe, color: "#635BFF" },
-    ],
+    title: "Nexus Commerce",
+    role: "Lead Frontend Architect",
+    description:
+      "End-to-end headless commerce platform with real-time inventory sync, AI-driven product recommendations, and sub-200ms page transitions across 12k+ SKUs.",
+    tech: ["Next.js", "TypeScript", "Stripe", "Prisma", "Tailwind CSS", "Vercel"],
+    assetCode: "OP_NEXUS.001",
+    status: "DEPLOYED",
+    demoUrl: "#",
+    sourceUrl: "#",
   },
   {
-    title: "SaaS Dashboard",
-    id: "PRJ_002",
-    status: "Production",
-    stack: [
-      { label: "React", Icon: SiReact, color: "#61DAFB" },
-      { label: "D3.js", Icon: SiD3, color: "#F9A03C" },
-    ],
+    title: "Sentinel Dashboard",
+    role: "Full Stack Engineer",
+    description:
+      "Real-time observability suite processing 2M+ events/day with interactive D3 visualizations, anomaly detection pipelines, and role-based access across distributed teams.",
+    tech: ["React", "Node.js", "PostgreSQL", "D3.js", "Docker", "Redis"],
+    assetCode: "OP_SNTL.002",
+    status: "PRODUCTION",
+    demoUrl: "#",
+    sourceUrl: "#",
   },
   {
-    title: "AI Content Studio",
-    id: "PRJ_003",
-    status: "Beta",
-    stack: [
-      { label: "Python", Icon: SiPython, color: "#3776AB" },
-      { label: "OpenAI", Icon: SiOpenai, color: "#10A37F" },
-    ],
-  },
-  {
-    title: "Mobile Banking App",
-    id: "PRJ_004",
-    status: "Shipped",
-    stack: [
-      { label: "React Native", Icon: SiReact, color: "#61DAFB" },
-      { label: "Node.js", Icon: SiNodedotjs, color: "#339933" },
-    ],
+    title: "Phantom Studio",
+    role: "Creative Technologist",
+    description:
+      "AI-powered content generation platform combining GPT-4 orchestration with custom fine-tuned models for brand-consistent copy, imagery, and video storyboards at scale.",
+    tech: ["Python", "OpenAI", "Next.js", "MongoDB", "AWS Lambda", "GSAP"],
+    assetCode: "OP_PHNTM.003",
+    status: "BETA",
+    demoUrl: "#",
+    sourceUrl: "#",
   },
 ];
 
-function ProjectStack({ stack }: { stack: StackEntry[] }) {
+function ProjectCard({ project, index }: { project: ProjectItem; index: number }) {
+  const [hovered, setHovered] = useState(false);
+
   return (
-    <div className="relative mt-6">
-      <div className="mb-2 flex items-center gap-2">
-        <span className="h-px flex-1 max-w-[72px] bg-linear-to-r from-white/25 to-transparent" />
-        <span className="text-[8px] uppercase tracking-[0.35em] text-white/30 font-mono">
-          stack trace
-        </span>
-      </div>
-
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="project-card relative flex-shrink-0 w-full md:w-[50vw] lg:w-[40vw] md:h-[75vh] md:min-h-[480px] md:max-h-[620px] rounded-lg border border-white/[0.06] bg-white/[0.01] backdrop-blur-md overflow-hidden group cursor-crosshair"
+    >
+      {/* Background grid pattern */}
       <div
-        className="relative overflow-hidden rounded-lg border border-white/6 bg-linear-to-br from-white/4 via-white/1 to-transparent p-3 backdrop-blur-[2px] before:pointer-events-none before:absolute before:inset-0 before:bg-[radial-gradient(800px_circle_at_80%_-20%,rgba(255,255,255,0.06),transparent_55%)] before:opacity-0 before:transition-opacity before:duration-500 group-hover:before:opacity-100"
-      >
-        <div className="relative flex flex-wrap items-center gap-2">
-          {stack.map((tech, i) => {
-            const Icon = tech.Icon;
-            return (
-              <div
-                key={`${tech.label}-${i}`}
-                className="group/pill relative flex items-center gap-1.5 rounded-md border border-white/7 bg-black/20 px-2 py-1 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] transition-all duration-300 hover:border-white/18 hover:bg-white/4"
-              >
-                <span
-                  className="absolute -inset-px rounded-md opacity-0 blur-sm transition-opacity duration-300 group-hover/pill:opacity-100"
-                  style={{
-                    background: `linear-gradient(135deg, ${tech.color}33, transparent 60%)`,
-                  }}
-                  aria-hidden
-                />
-                <Icon
-                  aria-hidden
-                  className="relative size-3.5 shrink-0 opacity-95 transition-transform duration-300 group-hover/pill:scale-110"
-                  style={{ color: tech.color }}
-                />
-                <span className="relative text-[9px] font-mono uppercase tracking-[0.14em] text-white/50 transition-colors duration-300 group-hover/pill:text-white/80">
-                  {tech.label}
-                </span>
-              </div>
-            );
-          })}
+        className="absolute inset-0 opacity-[0.02] pointer-events-none"
+        style={{
+          backgroundImage:
+            "linear-gradient(to right, rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.5) 1px, transparent 1px)",
+          backgroundSize: "32px 32px",
+        }}
+      />
 
-          <span
-            className="pointer-events-none ml-auto hidden text-[8px] font-mono uppercase tracking-[0.2em] text-white/15 sm:block"
-            aria-hidden
-          >
-            ···
+      {/* Radial hover glow */}
+      <motion.div
+        animate={hovered ? { opacity: 1 } : { opacity: 0 }}
+        transition={{ duration: 0.4 }}
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(600px circle at 50% 30%, rgba(139,92,246,0.06), transparent 60%)",
+        }}
+      />
+
+      {/* Corner tactical markers */}
+      <span className="absolute top-3 left-3 text-[9px] font-mono text-white/30 leading-none">+</span>
+      <span className="absolute top-3 right-3 text-[9px] font-mono text-white/30 leading-none">+</span>
+      <span className="absolute bottom-3 left-3 text-[9px] font-mono text-white/30 leading-none">+</span>
+      <span className="absolute bottom-3 right-3 text-[9px] font-mono text-white/30 leading-none">+</span>
+
+      {/* Asset code top-right */}
+      <span className="absolute top-5 right-6 text-[8px] font-mono text-white/10 tracking-[0.3em]">
+        {project.assetCode}
+      </span>
+
+      {/* Card content */}
+      <div className="relative h-full flex flex-col p-6 sm:p-8 md:p-10">
+        {/* Header meta */}
+        <div className="flex items-center gap-3 mb-6">
+          <span className="inline-flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.8)]" />
+            <span className="text-[9px] font-mono uppercase tracking-[0.2em] text-emerald-400/70">
+              {project.status}
+            </span>
           </span>
+          <div className="h-px flex-1 bg-linear-to-r from-white/8 to-transparent" />
+          <span className="text-[9px] font-mono text-white/20 tracking-[0.15em]">
+            [{String(index + 1).padStart(2, "0")}/03]
+          </span>
+        </div>
+
+        {/* Project image/mockup block */}
+        <div className="relative w-full h-[35%] min-h-[160px] rounded-md border border-white/[0.06] overflow-hidden mb-6 bg-black/30">
+          <div
+            className="absolute inset-0 transition-all duration-700 ease-out"
+            style={{
+              filter: hovered ? "grayscale(0%) brightness(1.1)" : "grayscale(100%) brightness(0.7)",
+              transform: hovered ? "scale(1.05)" : "scale(1)",
+            }}
+          >
+            <div className="w-full h-full bg-linear-to-br from-violet-900/20 via-pink-900/10 to-cyan-900/20 flex items-center justify-center">
+              <span className="text-[10px] text-white/20 font-mono uppercase tracking-[0.3em]">
+                [Mockup // {project.title}]
+              </span>
+            </div>
+          </div>
+
+          {/* Colour aura on hover */}
+          <motion.div
+            animate={hovered ? { opacity: 0.6 } : { opacity: 0 }}
+            transition={{ duration: 0.5 }}
+            className="absolute -inset-4 rounded-xl pointer-events-none blur-2xl"
+            style={{
+              background:
+                "radial-gradient(ellipse at center, rgba(139,92,246,0.3), rgba(236,72,153,0.15), transparent 70%)",
+            }}
+          />
+
+          {/* Scan line */}
+          <motion.div
+            animate={hovered ? { y: ["-100%", "200%"] } : { y: "-100%" }}
+            transition={{ duration: 2, ease: "linear", repeat: hovered ? Infinity : 0 }}
+            className="absolute inset-x-0 h-px pointer-events-none bg-violet-400/30"
+          />
+        </div>
+
+        {/* Title & role */}
+        <h3
+          style={{ fontFamily: "var(--font-passero), sans-serif" }}
+          className="text-xl sm:text-2xl md:text-3xl text-white/90 group-hover:text-white transition-colors duration-300 mb-1"
+        >
+          {project.title}
+        </h3>
+        <span
+          style={{ fontFamily: "var(--font-geo), sans-serif" }}
+          className="text-[11px] sm:text-xs text-violet-400/70 tracking-wide mb-4"
+        >
+          {project.role}
+        </span>
+
+        {/* Description */}
+        <p className="text-[11px] sm:text-xs text-white/40 leading-relaxed font-mono mb-auto max-w-md">
+          {project.description}
+        </p>
+
+        {/* Tech stack pills */}
+        <div className="flex flex-wrap gap-1.5 mb-6 mt-5">
+          {project.tech.map((t) => (
+            <span
+              key={t}
+              className="px-2 py-0.5 rounded border border-white/[0.06] bg-white/[0.02] text-[9px] font-mono uppercase tracking-wider text-white/35 group-hover:text-white/55 group-hover:border-white/10 transition-all duration-300"
+            >
+              {t}
+            </span>
+          ))}
+        </div>
+
+        {/* Action buttons */}
+        <div className="flex items-center gap-3 pt-4 border-t border-white/[0.05]">
+          <a
+            href={project.demoUrl}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded border border-violet-500/30 bg-violet-500/5 text-[10px] font-mono uppercase tracking-[0.2em] text-violet-300/80 hover:bg-violet-500/10 hover:border-violet-500/50 hover:text-violet-200 transition-all duration-300"
+          >
+            <span className="w-1 h-1 rounded-full bg-violet-400 shadow-[0_0_4px_rgba(139,92,246,0.8)]" />
+            Live Application
+          </a>
+          <a
+            href={project.sourceUrl}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded border border-white/[0.08] bg-white/[0.02] text-[10px] font-mono uppercase tracking-[0.2em] text-white/40 hover:bg-white/[0.05] hover:border-white/20 hover:text-white/70 transition-all duration-300"
+          >
+            <span className="w-1 h-1 rounded-full bg-white/40" />
+            View Source
+          </a>
         </div>
       </div>
     </div>
@@ -121,96 +201,119 @@ function ProjectStack({ stack }: { stack: StackEntry[] }) {
 }
 
 export default function WorkPreview() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  const cardsRef = useRef<HTMLDivElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const pinSectionRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
-      gsap.from(headingRef.current, {
-        y: 40,
-        opacity: 0,
-        duration: 1,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: headingRef.current,
-          start: "top 85%",
-          end: "top 65%",
-          scrub: 1,
-        },
-      });
+      const mm = gsap.matchMedia();
 
-      const cards = cardsRef.current?.children;
-      if (cards) {
-        gsap.from(Array.from(cards), {
-          y: 80,
-          opacity: 0,
-          stagger: 0.1,
-          duration: 1,
-          ease: "power3.out",
+      mm.add("(min-width: 768px)", () => {
+        const track = trackRef.current;
+        const pinSection = pinSectionRef.current;
+        if (!track || !pinSection) return;
+
+        const totalScroll = track.scrollWidth - window.innerWidth;
+
+        gsap.to(track, {
+          x: -totalScroll,
+          ease: "none",
           scrollTrigger: {
-            trigger: cardsRef.current,
-            start: "top 80%",
-            end: "top 45%",
+            trigger: pinSection,
+            pin: true,
             scrub: 1,
+            end: () => `+=${totalScroll}`,
+            invalidateOnRefresh: true,
           },
         });
-      }
+      });
     },
-    { scope: sectionRef }
+    { scope: wrapperRef },
   );
 
   return (
-    <section
-      ref={sectionRef}
-      id="work"
-      className="relative min-h-screen w-full py-32 px-6 md:px-12 flex flex-col items-center"
-    >
-      <div className="max-w-[1100px] w-full">
-        <div className="flex items-center gap-3 mb-4">
-          <span className="text-[10px] uppercase tracking-[0.25em] text-white/30 font-mono">
-            // Section_B: Project Archive
-          </span>
+    <div ref={wrapperRef} id="work" data-section="projects">
+      {/* Section heading — scrolls naturally before pin */}
+      <section className="relative w-full pt-24 sm:pt-32 md:pt-40 pb-10 sm:pb-14 md:pb-16">
+        <div className="relative z-10 w-full max-w-[1200px] mx-auto px-5 sm:px-6 md:px-12">
+          {/* Subtitle */}
+          <div className="flex items-center gap-3 mb-5">
+            <div className="h-px flex-1 max-w-12 bg-linear-to-r from-transparent to-white/20" />
+            <span className="text-[8px] sm:text-[9px] uppercase tracking-[0.3em] text-white/30 font-mono">
+              Portfolio // Selected Works
+            </span>
+            <div className="h-px flex-1 max-w-12 bg-linear-to-l from-transparent to-white/20" />
+          </div>
+
+          {/* Main title */}
+          <h2
+            style={{ fontFamily: "var(--font-passero), sans-serif" }}
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-center bg-linear-to-r from-white/90 via-white/70 to-white/50 bg-clip-text text-transparent mb-4"
+          >
+            Featured Projects
+          </h2>
+
+          <p className="text-center text-[10px] sm:text-[11px] font-mono text-white/20 tracking-[0.15em] uppercase mb-8 sm:mb-10">
+            Production applications &mdash; concept to deployment
+          </p>
+
+          {/* Decorative border with tactical markers */}
+          <div className="relative">
+            <div className="h-px bg-linear-to-r from-white/5 via-violet-500/25 to-white/5" />
+            <span className="absolute top-[-3px] left-0 text-[7px] text-violet-400/50 font-mono leading-none">
+              +
+            </span>
+            <span className="absolute top-[-3px] left-1/2 -translate-x-1/2 text-[7px] text-violet-400/40 font-mono leading-none">
+              &#x25C6;
+            </span>
+            <span className="absolute top-[-3px] right-0 text-[7px] text-violet-400/50 font-mono leading-none">
+              +
+            </span>
+          </div>
         </div>
-        <div className="h-px bg-linear-to-r from-white/15 to-transparent mb-12" />
+      </section>
 
-        <h2
-          ref={headingRef}
-          className="text-[clamp(2rem,5vw,3.5rem)] font-bold tracking-tight text-white mb-16 uppercase"
+      {/* Pinned horizontal scroll viewport — desktop */}
+      <div
+        ref={pinSectionRef}
+        className="hidden md:flex relative w-full h-screen items-center overflow-hidden"
+      >
+        <div
+          ref={trackRef}
+          className="flex items-center gap-6 lg:gap-10 px-[5vw]"
+          style={{ width: "max-content" }}
         >
-          Selected Work
-        </h2>
-
-        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {projects.map((project) => (
-            <div
-              key={project.id}
-              className="group relative border border-white/6 bg-white/1 p-6 cursor-pointer hover:border-white/15 hover:bg-white/3 transition-all duration-500"
-            >
-              <div className="flex items-center justify-between mb-6">
-                <span className="text-[9px] uppercase tracking-[0.3em] text-white/25 font-mono">
-                  {project.id}
-                </span>
-                <span className="text-[9px] uppercase tracking-[0.2em] text-emerald-400/60 font-mono">
-                  {project.status}
-                </span>
-              </div>
-
-              <h3 className="text-lg font-semibold text-white/80 group-hover:text-white transition-colors duration-300 mb-2">
-                {project.title}
-              </h3>
-
-              <ProjectStack stack={project.stack} />
-
-              <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <svg className="w-4 h-4 text-white/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
-                </svg>
-              </div>
-            </div>
+          {projects.map((project, i) => (
+            <ProjectCard key={project.assetCode} project={project} index={i} />
           ))}
+
+          {/* End marker */}
+          <div className="flex-shrink-0 flex flex-col items-center justify-center w-[200px]">
+            <div className="w-px h-20 bg-linear-to-b from-transparent via-white/10 to-transparent mb-4" />
+            <span className="text-[8px] font-mono text-white/15 tracking-[0.4em] uppercase">
+              End of List
+            </span>
+            <div className="w-px h-20 bg-linear-to-b from-transparent via-white/10 to-transparent mt-4" />
+          </div>
         </div>
       </div>
-    </section>
+
+      {/* Vertical stack — mobile */}
+      <div className="md:hidden relative w-full px-5 sm:px-6 pb-16 space-y-5">
+        {projects.map((project, i) => (
+          <ProjectCard key={project.assetCode} project={project} index={i} />
+        ))}
+      </div>
+
+      {/* Bottom classification */}
+      <div className="relative z-10 flex items-center justify-center gap-4 py-16 md:py-24">
+        <div className="h-px w-12 bg-linear-to-r from-transparent to-white/10" />
+        <span className="text-[7px] font-mono text-white/15 tracking-[0.4em] uppercase">
+          Portfolio Status: Current
+        </span>
+        <div className="h-px w-12 bg-linear-to-l from-transparent to-white/10" />
+      </div>
+    </div>
   );
 }
